@@ -3,7 +3,12 @@ const app = express();
 
 app.use(express.json());
 
-// WEBHOOK
+// rota principal
+app.get("/", (req, res) => {
+    res.send("Servidor online");
+});
+
+// webhook
 app.post("/webhook", (req, res) => {
     console.log("Webhook recebido:");
     console.log(req.body);
@@ -11,13 +16,8 @@ app.post("/webhook", (req, res) => {
     res.sendStatus(200);
 });
 
-// rota teste (opcional)
-app.get("/", (req, res) => {
-    res.send("Servidor online");
-});
-
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-    console.log("Servidor rodando na porta", PORT);
+    console.log("Servidor rodando");
 });

@@ -12,7 +12,7 @@ app.get("/", (req, res) => {
 app.post("/webhook", (req, res) => {
     try {
         const tokenRecebido = req.headers["asaas-access-token"];
-        const meuToken = "whsec_0v8tdYh7AaAHFs94UVHHaLMe4Sze9xgDqUmU1FzBdxY";
+        const meuToken = "whsec_Q4IofYJCnmuXCL_BEwFEZZz5SpoCZXGfVpbdcz2hGm0";
 
         if (!tokenRecebido || tokenRecebido !== meuToken) {
             console.log("Token inválido");

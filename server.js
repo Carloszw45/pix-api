@@ -11,7 +11,7 @@ app.get("/", (req, res) => {
 // 🔥 WEBHOOK (AQUI)
 app.post("/webhook", (req, res) => {
     const tokenRecebido = req.headers["asaas-access-token"];
-    const meuToken = "whsec_Q4IofYJCnmuXCL_BEwFEZZz5SpoCZXGfVpbdcz2hGm0";
+    const meuToken = "whsec_l1M4NqFT6EFQmZ044sqDuFKqEfc6na5DHoIT2xpMxCo";
 
     if (!tokenRecebido) {
         return res.sendStatus(200);

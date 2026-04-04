@@ -8,27 +8,32 @@ app.get("/", (req, res) => {
     res.send("Servidor online");
 });
 
-// 🔥 WEBHOOK (AQUI)
+// webhook com segurança
 app.post("/webhook", (req, res) => {
-    const tokenRecebido = req.headers["asaas-access-token"];
-    const meuToken = "whsec_l1M4NqFT6EFQmZ044sqDuFKqEfc6na5DHoIT2xpMxCo";
+    try {
+        const tokenRecebido = req.headers["asaas-access-token"];
+        const meuToken = "whsec_l1M4NqFT6EFQmZ044sqDuFKqEfc6na5DHoIT2xpMxCo";
 
-    if (!tokenRecebido) {
-        return res.sendStatus(200);
+        if (!tokenRecebido || tokenRecebido !== meuToken) {
+            console.log("Token inválido");
+            return res.sendStatus(401);
+        }
+
+        console.log("Webhook válido recebido:");
+        console.log(req.body);
+
+        const data = req.body;
+
+        if (data.event === "PAYMENT_RECEIVED") {
+            console.log("Pagamento confirmado!");
+        }
+
+        res.sendStatus(200);
+
+    } catch (erro) {
+        console.error("Erro no webhook:", erro);
+        res.sendStatus(500);
     }
-
-    if (tokenRecebido !== meuToken) {
-        return res.sendStatus(401);
-    }
-
-    console.log("Webhook recebido:", req.body);
-
-    res.sendStatus(200);
-});
-
-// sua rota de pagamento continua aqui
-app.post("/criar-pagamento", async (req, res) => {
-    // seu código aqui
 });
 
 const PORT = process.env.PORT || 3000;

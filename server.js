@@ -1,6 +1,10 @@
 const express = require("express");
+const cors = require("cors");
+
 const app = express();
 
+// 🔥 LIBERA ACESSO DO SEU SITE (ESSENCIAL)
+app.use(cors());
 app.use(express.json());
 
 // ✅ ROTA PRINCIPAL
@@ -8,37 +12,37 @@ app.get("/", (req, res) => {
     res.send("Servidor online");
 });
 
-// ✅ WEBHOOK (SEM ERRO 401 / 408)
+// ✅ WEBHOOK (ASAAS)
 app.post("/webhook", (req, res) => {
     console.log("Webhook recebido");
 
-    // 🔥 responde imediatamente (ESSENCIAL)
+    // 🔥 responde rápido (evita erro 408)
     res.sendStatus(200);
 
-    // logs para ver o que chega
     console.log("Headers:", req.headers);
     console.log("Body:", req.body);
 
     const data = req.body;
 
-    // exemplo de evento
     if (data.event === "PAYMENT_RECEIVED") {
         console.log("💰 Pagamento confirmado!");
     }
 });
 
-// ✅ CRIAR PAGAMENTO (PIX, BOLETO, CARTÃO)
+// ✅ CRIAR PAGAMENTO
 app.post("/criar-pagamento", async (req, res) => {
     try {
+        const { metodo } = req.body;
+
         const response = await fetch("https://api.asaas.com/v3/payments", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "access_token": "whsec_l1M4NqFT6EFQmZ044sqDuFKqEfc6na5DHoIT2xpMxCo" // 🔥 COLOCA SUA API KEY DO ASAAS
+                "access_token": "$aact_prod_000MzkwODA2MWY2OGM3MWRlMDU2NWM3MzJlNzZmNGZhZGY6OjI4ZjhmNWI1LTQyNzMtNDQwZC05MDY5LTY4ODczODU4ZTdkNzo6JGFhY2hfZWQwOGFjMDgtOWU3My00Mjk2LWFjNGEtN2QwYTg1ZTdmZjNi" // 🔥 API KEY REAL DO ASAAS
             },
             body: JSON.stringify({
-                customer: "cus_000000000", // depois você pode melhorar isso
-                billingType: "PIX", // PIX, BOLETO ou CREDIT_CARD
+                customer: "cus_000000000", // depois ajustamos isso
+                billingType: metodo, // 🔥 PIX, BOLETO ou CREDIT_CARD
                 value: 10.00,
                 dueDate: "2026-04-10",
                 description: "Compra no site"
@@ -46,6 +50,8 @@ app.post("/criar-pagamento", async (req, res) => {
         });
 
         const data = await response.json();
+
+        console.log("Resposta Asaas:", data);
 
         res.json(data);
 
@@ -55,7 +61,7 @@ app.post("/criar-pagamento", async (req, res) => {
     }
 });
 
-// ✅ PORTA (Render usa automaticamente)
+// ✅ PORTA
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {

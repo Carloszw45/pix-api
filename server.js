@@ -38,7 +38,7 @@ app.post("/criar-pagamento", async (req, res) => {
             },
             body: JSON.stringify({
                 name: "Cliente Teste",
-                cpfCnpj: "01960769600", // pode trocar depois
+                cpfCnpj: "12345678909", // pode trocar depois
                 email: "teste@email.com"
             })
         });

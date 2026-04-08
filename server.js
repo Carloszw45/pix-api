@@ -27,7 +27,7 @@ app.post("/webhook", (req, res) => {
 // ✅ CRIAR PAGAMENTO (COM CLIENTE AUTOMÁTICO)
 app.post("/criar-pagamento", async (req, res) => {
     try {
-        const { metodo } = req.body;
+        const { metodo, valor } = req.body;
 
         // 🔥 1. CRIAR CLIENTE
         const clienteRes = await fetch("https://api.asaas.com/v3/customers", {
@@ -60,7 +60,7 @@ app.post("/criar-pagamento", async (req, res) => {
             body: JSON.stringify({
                 customer: cliente.id,
                 billingType: metodo, // PIX, BOLETO, CREDIT_CARD
-                value: 10.00,
+                value: valor,
                 dueDate: "2026-04-10",
                 description: "Compra no site"
             })

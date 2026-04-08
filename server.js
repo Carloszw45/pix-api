@@ -68,9 +68,31 @@ app.post("/criar-pagamento", async (req, res) => {
 
         const pagamento = await pagamentoRes.json();
 
-        console.log("Resposta Asaas:", pagamento);
+console.log("Resposta Asaas:", pagamento);
 
-        res.json(pagamento);
+// 🔥 SE FOR PIX, BUSCA QR CODE
+if (metodo === "PIX") {
+    const pixRes = await fetch(
+        `https://api.asaas.com/v3/payments/${pagamento.id}/pixQrCode`,
+        {
+            method: "GET",
+            headers: {
+                "access_token": ASAAS_API_KEY
+            }
+        }
+    );
+
+    const pixData = await pixRes.json();
+
+    return res.json({
+        ...pagamento,
+        pixQrCode: pixData.payload,
+        pixQrCodeImage: pixData.encodedImage
+    });
+}
+
+// outros métodos
+res.json(pagamento);
 
     } catch (erro) {
         console.error("Erro:", erro);

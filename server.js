@@ -27,7 +27,20 @@ app.post("/webhook", (req, res) => {
 // ✅ CRIAR PAGAMENTO (COM CLIENTE AUTOMÁTICO)
 app.post("/criar-pagamento", async (req, res) => {
     try {
-        const { metodo, valor } = req.body;
+       const { 
+    metodo,
+    valor,
+    nome,
+    email,
+    telefone,
+    cpf,
+    cep,
+    rua,
+    numero,
+    bairro,
+    cidade,
+    estado
+} = req.body;
 
         // 🔥 1. CRIAR CLIENTE
         const clienteRes = await fetch("https://api.asaas.com/v3/customers", {
@@ -37,10 +50,15 @@ app.post("/criar-pagamento", async (req, res) => {
                 "access_token": ASAAS_API_KEY
             },
             body: JSON.stringify({
-                name: "Cliente Teste",
-                cpfCnpj: "12345678909", // pode trocar depois
-                email: "teste@email.com"
-            })
+    name: nome,
+    email: email,
+    cpfCnpj: cpf,
+    phone: telefone,
+    postalCode: cep,
+    address: rua,
+    addressNumber: numero,
+    province: bairro
+})
         });
 
         const cliente = await clienteRes.json();

@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const fs = require("fs");
 
 const app = express();
 
@@ -87,6 +88,19 @@ app.post("/criar-pagamento", async (req, res) => {
         const pagamento = await pagamentoRes.json();
 
 console.log("Resposta Asaas:", pagamento);
+
+        // 🔥 SALVAR PEDIDO
+const pedido = {
+    nome,
+    email,
+    telefone,
+    cpf,
+    valor,
+    metodo,
+    data: new Date()
+};
+
+fs.appendFileSync("pedidos.json", JSON.stringify(pedido) + "\n");
 
 // 🔥 SE FOR PIX, BUSCA QR CODE
 if (metodo === "PIX") {
